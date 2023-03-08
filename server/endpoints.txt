@@ -1,0 +1,14 @@
+
+endpoints only work with an ID of 1
+
+GET http://localhost:3000/id/name
+    * returns user name associated with the specified ID
+
+GET http://localhost:3000/id/balance
+    * returns a users balance as a string
+
+POST http://localhost:3000/id/balance/deposit
+    * returns a 200 status code if deposit is valid
+
+POST http://localhost:3000/id/balance/withdraw
+    * returns a 200 status code if withdraw is valid
