@@ -14,16 +14,25 @@ app.listen(PORT, () => {
   console.log(`server live on port http://localhost:${PORT}`);
 });
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
+
+app.get("/", (req, res) => {
+  res.send("server live");
+});
+
 app.get("/hello", (req, res) => {
   res.send("hello world");
 });
 
 app.get(`/${tempId}/balance`, (req, res) => {
-  res.send(String(tempUser.balance));
+  res.send(JSON.stringify(tempUser.balance));
 });
 
 app.get(`/${tempId}/name`, (req, res) => {
-  res.send(String(tempUser.name));
+  res.send(JSON.stringify(tempUser.name));
 });
 
 app.post(`/${tempId}/balance/deposit`, (req, res) => {
