@@ -1,1 +1,8 @@
 db visualized : https://drawsql.app/teams/bankify/diagrams/bankify
+
+Account types
+0: savings
+1: checking
+2: credit
+
+datetime format : YYYY-MM-DD HH:MI:SS
