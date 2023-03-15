@@ -1,0 +1,1 @@
+db visualized : https://drawsql.app/teams/bankify/diagrams/bankify
