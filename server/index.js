@@ -1,3 +1,5 @@
+//TODO could use more middleware
+
 import express from "express";
 import mysql from "mysql2";
 
@@ -10,16 +12,17 @@ const db = mysql.createConnection({
 });
 
 const PORT = 3000;
-const tempId = 1;
-
-let tempUser = {
-  name: "John",
-  balance: 500,
-};
 
 app.listen(PORT, () => {
   console.log(`server live on port http://localhost:${PORT}`);
 });
+
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -47,7 +50,7 @@ app.get(`/:id/balance`, (req, res) => {
     let balance = data[0] ? data[0].balance.toString() : null;
 
     if (balance) {
-      res.send(balance);
+      res.send(`${balance}\n`);
     } else {
       res.sendStatus(404);
     }
@@ -66,40 +69,92 @@ app.get(`/:id`, (req, res) => {
     let name = data[0] ? data[0].fname : null;
 
     if (name) {
-      res.send(name);
+      res.send(`${name}\n`);
     } else {
       res.sendStatus(404);
     }
   });
 });
 
-app.post(`/${tempId}/balance/deposit`, (req, res) => {
-  const amount = Number(req.body.amount);
+app.post(`/:id/balance/deposit`, (req, res) => {
+  const depositAmount = Number(req.body.amount);
 
-  //balance will be user specific
-  //sanitize request
-  if (amount <= 0) {
-    res.status(400).send("can only deposit amounts greater than 0");
+  // make sure deposit is valid
+  if (depositAmount <= 0) {
+    res.status(400).send("can only deposit amounts greater than 0\n");
+    return;
   }
 
-  tempUser.balance += amount;
+  const id = req.params.id;
 
-  res.sendStatus(200);
+  const sql = `SELECT balance
+  FROM savings
+  WHERE user_id = ${id}`;
+
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+
+    // check to see if a balance exists for the provided id
+    if (data[0]) {
+      const { balance } = data[0];
+      const newBalance = balance + depositAmount;
+
+      //update the users balance
+      db.query(
+        `UPDATE savings
+        SET balance = ${newBalance}
+        WHERE user_id = ${id}`,
+        (err) => {
+          if (err) throw err;
+          res.send(JSON.stringify(newBalance) + "\n");
+        }
+      );
+    } else {
+      res.status(400).send("user doesn't have an account\n");
+    }
+  });
 });
 
-app.post(`/${tempId}/balance/withdraw`, (req, res) => {
-  const amount = Number(req.body.amount);
+app.post(`/:id/balance/withdraw`, (req, res) => {
+  const withdrawAmount = Number(req.body.amount);
 
-  //balance will be user specific
   //sanitize request
-  if (amount <= 0) {
-    res.status(400).send("can only withdraw amounts greater than 0");
-  }
-  if (amount > tempUser.balance) {
-    res.status(400).send("balance isn't large enough");
+  if (withdrawAmount <= 0) {
+    res.status(400).send("can only withdraw amounts greater than 0\n");
+    return;
   }
 
-  tempUser.balance -= amount;
+  const id = req.params.id;
 
-  res.sendStatus(200);
+  const sql = `SELECT balance
+  FROM savings
+  WHERE user_id = ${id}`;
+
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+
+    // check to see if a balance exists for the provided id
+    if (data[0]) {
+      const { balance } = data[0];
+      if (withdrawAmount > balance) {
+        res.status(400).send("withdraw amount exceeds balance\n");
+        return;
+      }
+
+      const newBalance = balance - withdrawAmount;
+
+      //update the users balance
+      db.query(
+        `UPDATE savings
+        SET balance = ${newBalance}
+        WHERE user_id = ${id}`,
+        (err) => {
+          if (err) throw err;
+          res.send(JSON.stringify(newBalance) + "\n");
+        }
+      );
+    } else {
+      res.status(400).send("user doesn't have an account\n");
+    }
+  });
 });
