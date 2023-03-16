@@ -170,12 +170,9 @@ CREATE TABLE credit (
         (50, 0, 2, "2023-05-10 10:00:00", 6 );
 
 --@block 
-    SELECT *  from credit;
+    SELECT * from credit;
 
 
-
-
-        --QUERIES
 --@block: list of accounts held by each user
     SELECT users.id, fname, lname, accounts.account_type
     FROM users

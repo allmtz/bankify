@@ -2,6 +2,7 @@ Backend
     * DB
 
     * Need a way to create a user/user sign-up
+        * verify/sterilize input
 
     * Authenticate a user
     
