@@ -1,6 +1,13 @@
 import express from "express";
+import mysql from "mysql2";
 
 const app = express();
+const db = mysql.createConnection({
+  host: "127.0.0.1",
+  user: "root",
+  database: "bankify",
+  password: "YOUR_PASSWORD",
+});
 
 const PORT = 3000;
 const tempId = 1;
@@ -27,12 +34,43 @@ app.get("/hello", (req, res) => {
   res.send("hello world");
 });
 
-app.get(`/${tempId}/balance`, (req, res) => {
-  res.send(JSON.stringify(tempUser.balance));
+app.get(`/:id/balance`, (req, res) => {
+  const id = req.params.id;
+
+  const sql = `SELECT balance 
+  FROM savings 
+  WHERE user_id = ${id}`;
+
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+
+    let balance = data[0] ? data[0].balance.toString() : null;
+
+    if (balance) {
+      res.send(balance);
+    } else {
+      res.sendStatus(404);
+    }
+  });
 });
 
-app.get(`/${tempId}/name`, (req, res) => {
-  res.send(JSON.stringify(tempUser.name));
+app.get(`/:id`, (req, res) => {
+  const id = req.params.id;
+
+  const sql = `SELECT fname 
+  FROM users 
+  WHERE id = ${id}`;
+
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    let name = data[0] ? data[0].fname : null;
+
+    if (name) {
+      res.send(name);
+    } else {
+      res.sendStatus(404);
+    }
+  });
 });
 
 app.post(`/${tempId}/balance/deposit`, (req, res) => {
