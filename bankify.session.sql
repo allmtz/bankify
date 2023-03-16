@@ -5,6 +5,7 @@
         lname VARCHAR(255),
         email VARCHAR(255),
         password VARCHAR(255),
+        user_name VARCHAR(255) UNIQUE NOT NULL,  
         date_created DATETIME
     );
 
@@ -56,42 +57,48 @@ CREATE TABLE credit (
 -- datetime format : YYYY-MM-DD HH:MI:SS
 
 --@block    
-    INSERT INTO users (fname, lname, email, password, date_created)
+    INSERT INTO users (fname, lname, email, password, user_name, date_created)
     VALUES (
         "John",
         "Smith",
         "js@email.com",
         "pass",
+        "johnsmithy",
         "2023-03-15 13:26:00"
     ),(
         "Ricky",
         "Bobby",
         "rickbob@email.com",
         "gofast",
+        "first",
         "2023-03-15 08:10:00"
     ),(
         "Frank",
         "Tank",
         "frankthetank@email.com",
         "tanky",
+        "tankinator",
         "2023-03-15 16:36:00"
     ),(
         "Jacky",
         "Moon",
         "jmoon@email.com",
         "kindapro",
+        "lovemesexy",
         "2023-03-20 23:44:00"
     ),(
         "Ron",
         "Burgundy",
         "channel4@email.com",
         "sandiago",
+        "bestAnchor",
         "2021-03-15 07:00:00"
     ),(
         "Allen",
         "Gamble",
         "ag@email.com",
         "gator",
+        "detectiveGamble",
         "2023-03-15 19:16:00"
     );
 
