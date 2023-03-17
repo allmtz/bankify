@@ -182,3 +182,26 @@ app.post("/signup", (req, res) => {
     }
   });
 });
+
+app.post("/login", async (req, res) => {
+  const sql = `SELECT user_name, password
+  FROM users
+  WHERE user_name = "${req.body.userName}"`;
+
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+
+    if (data.length === 0) {
+      res.status(404).send("user name not found\n");
+    }
+
+    // check if provided password matches db
+    if (data[0].password === req.body.password) {
+      //log user in
+      res.send(`Logged in as ${req.body.userName}\n`);
+    } else {
+      //password is incorrect
+      res.sendStatus(401);
+    }
+  });
+});

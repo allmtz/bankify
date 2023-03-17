@@ -37,3 +37,16 @@ POST http://localhost:3000/signup
     * example: 
         $ curl --json @json.txt http://localhost:3000/signup
             * make sure json.txt is a local file with text in JSON format
+
+POST http://localhost:3000/login
+    * JSON example :
+        {
+            userName: "name"
+            password: "pass"
+        }
+    * keys MUST be the same as in the example above
+    * returns 
+        404 if `userName` is not found
+        401 if password is incorrect
+        200 if login successful 
+
