@@ -1,7 +1,11 @@
-//TODO could use more middleware
+// TODO could use more middleware
+// case sensitive usernames ex: bestAnchor vs bestanchor
+// need a way to create an account
+// automatically create a savings account for everyone that signs up
 
 import express from "express";
 import mysql from "mysql2";
+import bcrypt from "bcrypt";
 
 const app = express();
 const db = mysql.createConnection({
@@ -159,14 +163,17 @@ app.post(`user/:id/balance/withdraw`, (req, res) => {
   });
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
   const { userName, fname, lname, email, password } = req.body;
+
+  // hash user passwords
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime
   let dateCreated = new Date().toISOString().slice(0, 19).replace("T", " ");
 
   const sql = `INSERT INTO users (fname, lname, email, password, user_name, date_created)
-  VALUES ("${fname}", "${lname}", "${email}", "${password}", "${userName}", "${dateCreated}" )`;
+  VALUES ("${fname}", "${lname}", "${email}", "${hashedPassword}", "${userName}", "${dateCreated}" )`;
 
   // try to create the user
   db.query(sql, (err, data) => {
@@ -183,7 +190,7 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", (req, res) => {
   const sql = `SELECT user_name, password
   FROM users
   WHERE user_name = "${req.body.userName}"`;
@@ -193,10 +200,17 @@ app.post("/login", async (req, res) => {
 
     if (data.length === 0) {
       res.status(404).send("user name not found\n");
+      return;
     }
 
+    // compare provided password with hashed password
+    const passwordsMatch = bcrypt.compareSync(
+      req.body.password,
+      data[0].password
+    );
+
     // check if provided password matches db
-    if (data[0].password === req.body.password) {
+    if (passwordsMatch) {
       //log user in
       res.send(`Logged in as ${req.body.userName}\n`);
     } else {
