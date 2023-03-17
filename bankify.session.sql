@@ -62,43 +62,43 @@ CREATE TABLE credit (
         "John",
         "Smith",
         "js@email.com",
-        "pass",
+        "$2b$10$sKfstzktGCR.zmEL0Q8eI.o6Mujw0y7vSCb/pjs5McOVitWca/VGq", 
         "johnsmithy",
         "2023-03-15 13:26:00"
     ),(
         "Ricky",
         "Bobby",
         "rickbob@email.com",
-        "gofast",
+        "$2b$10$frYFsGm7hgJAxGzka7u7cusaSTkUhRwMHYU8XZ7UO4W7FCbFiw/W.",
         "first",
         "2023-03-15 08:10:00"
     ),(
         "Frank",
         "Tank",
         "frankthetank@email.com",
-        "tanky",
+        "$2b$10$sAXIe4G24Dy1BCXiDPkqpeIM1hwVFunEVJwA2uJjmZrtIzjKngrI2",
         "tankinator",
         "2023-03-15 16:36:00"
     ),(
         "Jacky",
         "Moon",
         "jmoon@email.com",
-        "kindapro",
+        "$2b$10$h1KbJvJTDq48s6V4aTZ83eVEDuBcXLyGs0ldiAs1ueiPlI0ESCMdW",
         "lovemesexy",
         "2023-03-20 23:44:00"
     ),(
         "Ron",
         "Burgundy",
         "channel4@email.com",
-        "sandiago",
+        "$2b$10$xTTOEHl18V.WFUvJSZvTCupr/mM/mc7sn369fzEGg44r/5rTxyUAS",
         "bestAnchor",
         "2021-03-15 07:00:00"
     ),(
         "Allen",
         "Gamble",
         "ag@email.com",
+        "$2b$10$RkMDIJV9bpSWqm6Y1VF5u.LVs3vB9/zcaQUObydfM7TZ9tAYCIYie",
         "gator",
-        "detectiveGamble",
         "2023-03-15 19:16:00"
     );
 
