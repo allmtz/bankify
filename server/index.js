@@ -37,7 +37,7 @@ app.get("/hello", (req, res) => {
   res.send("hello world");
 });
 
-app.get(`/:id/balance`, (req, res) => {
+app.get(`/user/balance`, (req, res) => {
   const id = req.params.id;
 
   const sql = `SELECT balance 
@@ -57,7 +57,7 @@ app.get(`/:id/balance`, (req, res) => {
   });
 });
 
-app.get(`/:id`, (req, res) => {
+app.get(`/user/:id`, (req, res) => {
   const id = req.params.id;
 
   const sql = `SELECT fname 
@@ -76,7 +76,7 @@ app.get(`/:id`, (req, res) => {
   });
 });
 
-app.post(`/:id/balance/deposit`, (req, res) => {
+app.post(`/user/:id/balance/deposit`, (req, res) => {
   const depositAmount = Number(req.body.amount);
 
   // make sure deposit is valid
@@ -115,7 +115,7 @@ app.post(`/:id/balance/deposit`, (req, res) => {
   });
 });
 
-app.post(`/:id/balance/withdraw`, (req, res) => {
+app.post(`user/:id/balance/withdraw`, (req, res) => {
   const withdrawAmount = Number(req.body.amount);
 
   //sanitize request
@@ -155,6 +155,30 @@ app.post(`/:id/balance/withdraw`, (req, res) => {
       );
     } else {
       res.status(400).send("user doesn't have an account\n");
+    }
+  });
+});
+
+app.post("/signup", (req, res) => {
+  const { userName, fname, lname, email, password } = req.body;
+
+  // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime
+  let dateCreated = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  const sql = `INSERT INTO users (fname, lname, email, password, user_name, date_created)
+  VALUES ("${fname}", "${lname}", "${email}", "${password}", "${userName}", "${dateCreated}" )`;
+
+  // try to create the user
+  db.query(sql, (err, data) => {
+    if (err) {
+      // username is already taken
+      if (err.errno === 1062) {
+        res.sendStatus(400);
+        return;
+      }
+      throw err;
+    } else {
+      res.sendStatus(200 + "\n");
     }
   });
 });
