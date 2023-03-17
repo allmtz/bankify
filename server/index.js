@@ -41,7 +41,7 @@ app.get("/hello", (req, res) => {
   res.send("hello world");
 });
 
-app.get(`/user/balance`, (req, res) => {
+app.get(`/user/:id/balance`, (req, res) => {
   const id = req.params.id;
 
   const sql = `SELECT balance 
