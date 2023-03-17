@@ -1,17 +1,39 @@
+to make a get request :
+    $ curl http://localhost:3000/<TARGET_PATH>
+    
 
-
-GET http://localhost:3000/id
+GET http://localhost:3000/user/:id
     * returns the user name associated with the specified ID
 
-GET http://localhost:3000/id/balance
+GET http://localhost:3000/user/:id/balance
     * returns a users balance as a string
 
-POST http://localhost:3000/id/balance/deposit
+
+POST http://localhost:3000/user/:id/balance/deposit
     * looks for a JSON `amount` in the request body
     * returns a 200 status code if deposit is valid
     * returns 400 status if user with `id` does not have a savings account
+    * example: $ curl http://localhost:3000/user/1/balance/deposit -d amount=100
 
-POST http://localhost:3000/id/balance/withdraw
+
+POST http://localhost:3000/user/:id/balance/withdraw
     * looks for a JSON `amount` in the request body
     * returns a 200 status code if withdraw is valid
     * returns 400 status if user with `id` does not have a savings account  
+    * example: $ curl http://localhost:3000/user/1/balance/withdraw -d amount=100
+
+
+POST http://localhost:3000/signup
+    * JSON example : 
+        {
+            "userName": "cooUserName",
+            "fname": "first",
+            "lname": "last",
+            "email": "@email.com",
+            "password": "pass"
+        }
+    * keys MUST be the same as in the example above
+    * returns 400 if username is taken
+    * example: 
+        $ curl --json @json.txt http://localhost:3000/signup
+            * make sure json.txt is a local file with text in JSON format
