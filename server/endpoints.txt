@@ -1,6 +1,15 @@
 to make a get request :
     $ curl http://localhost:3000/<TARGET_PATH>
-    
+
+
+usernames and un-hashed passwords
+    { user_name: 'johnsmithy', password: 'pass' },
+    { user_name: 'first', password: 'gofast' },
+    { user_name: 'tankinator', password: 'tanky' },
+    { user_name: 'lovemesexy', password: 'kindapro' },
+    { user_name: 'bestAnchor', password: 'sandiago' },
+    { user_name: 'detectiveGamble', password: 'gator' }
+        
 
 GET http://localhost:3000/user/:id
     * returns the user name associated with the specified ID
@@ -49,4 +58,7 @@ POST http://localhost:3000/login
         404 if `userName` is not found
         401 if password is incorrect
         200 if login successful 
+    * example: 
+        $ curl --json @json.txt http://localhost:3000/login
+            * make sure json.txt is a local file with text in JSON format
 
