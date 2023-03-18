@@ -1,6 +1,8 @@
+-- datetime format : YYYY-MM-DD HH:MI:SS
+
 --@block
     CREATE TABLE users (
-        id INT PRIMARY KEY AUTO_INCREMENT,
+        id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
         fname VARCHAR(255),
         lname VARCHAR(255),
         email VARCHAR(255),
@@ -54,8 +56,6 @@ CREATE TABLE credit (
     SHOW TABLES;
 
 
--- datetime format : YYYY-MM-DD HH:MI:SS
-
 --@block    
     INSERT INTO users (fname, lname, email, password, user_name, date_created)
     VALUES (
@@ -108,25 +108,23 @@ CREATE TABLE credit (
 --@block
     INSERT INTO accounts(account_type, user_id) 
     VALUES (
+        0,1
+    ),(
         0,2
     ),(
+        0,3
+    ),(
+        1,1
+    ),(
         1,2
+    ),(
+        1,3
+    ),(
+        2,1
     ),(
         2,2
     ),(
         2,3
-    ),(
-        0,4
-    ),(
-        1,5
-    ),(
-        0,5
-    ),(
-        2,6
-    ),(
-        0,6
-    ),(
-        1,7
     );
 
 --@block 
@@ -139,19 +137,19 @@ CREATE TABLE credit (
         1.5,
         0,
         "2023-05-10 10:00:00",
-        5
+        1
     ),(
         300,
         5.0,
         0,
         "2023-05-10 10:00:00",
-        7
+        2
     ),(
         630,
         1.5,
         0,
         "2023-05-10 10:00:00",
-        9
+        3
     );
 
 --@block 
@@ -161,9 +159,9 @@ CREATE TABLE credit (
 --@block
     INSERT INTO checkings(balance, account_type, date_opened, user_id)
      VALUES 
-        (500, 1, "2023-05-10 10:00:00", 2),
-        (830, 1, "2023-05-10 10:00:00", 5),
-        (620, 1, "2023-05-10 10:00:00", 7);
+        (500, 1, "2023-05-10 10:00:00", 1),
+        (830, 1, "2023-05-10 10:00:00", 2),
+        (620, 1, "2023-05-10 10:00:00", 3);
 
 --@block 
     SELECT *  from checkings;
@@ -172,9 +170,9 @@ CREATE TABLE credit (
 --@block
     INSERT INTO credit (credit_limit, balance, account_type, date_opened, user_id)
     VALUES
-        (7000, 300, 2, "2023-05-10 10:00:00", 2 ),
-        (200, 100, 2, "2023-05-10 10:00:00", 3 ),
-        (50, 0, 2, "2023-05-10 10:00:00", 6 );
+        (7000, 300, 2, "2023-05-10 10:00:00", 1 ),
+        (200, 100, 2, "2023-05-10 10:00:00", 2 ),
+        (50, 0, 2, "2023-05-10 10:00:00", 3 );
 
 --@block 
     SELECT * from credit;
