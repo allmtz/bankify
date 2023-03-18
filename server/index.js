@@ -1,7 +1,6 @@
 // TODO could use more middleware
 // case sensitive usernames ex: bestAnchor vs bestanchor
 // need a way to create an account
-// automatically create a savings account for everyone that signs up
 
 import express from "express";
 import mysql from "mysql2";
@@ -169,8 +168,7 @@ app.post("/signup", async (req, res) => {
   // hash user passwords
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime
-  let dateCreated = new Date().toISOString().slice(0, 19).replace("T", " ");
+  const dateCreated = getFormatedDatetime();
 
   const sql = `INSERT INTO users (fname, lname, email, password, user_name, date_created)
   VALUES ("${fname}", "${lname}", "${email}", "${hashedPassword}", "${userName}", "${dateCreated}" )`;
@@ -185,7 +183,10 @@ app.post("/signup", async (req, res) => {
       }
       throw err;
     } else {
-      res.sendStatus(200 + "\n");
+      // user successfully created -> open a savings account for the user
+      openSavingsAccount(data.insertId, dateCreated);
+
+      res.sendStatus(201 + "\n");
     }
   });
 });
@@ -219,3 +220,21 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+function getFormatedDatetime() {
+  return new Date().toISOString().slice(0, 19).replace("T", " ");
+}
+
+function openSavingsAccount(userID, datetime) {
+  const sql = {
+    createSavings: `INSERT INTO savings (balance, apr, account_type, date_opened, user_id)
+    VALUES (0, 1.0, 0, "${datetime}", ${userID} )`,
+    associateSavings: `INSERT INTO accounts (account_type, user_id)
+    VALUES (0, ${userID})`,
+  };
+
+  db.query(sql.createSavings);
+
+  // add the account presence into the `accounts` table
+  db.query(sql.associateSavings);
+}
