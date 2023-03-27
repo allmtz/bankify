@@ -192,7 +192,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const sql = `SELECT user_name, password
+  const sql = `SELECT user_name, password, id
   FROM users
   WHERE user_name = "${req.body.userName}"`;
 
@@ -213,7 +213,11 @@ app.post("/login", (req, res) => {
     // check if provided password matches db
     if (passwordsMatch) {
       //log user in
-      res.send(`Logged in as ${req.body.userName}\n`);
+      const user = {
+        name: data[0].user_name,
+        id: data[0].id,
+      };
+      res.send(user);
     } else {
       //password is incorrect
       res.sendStatus(401);
