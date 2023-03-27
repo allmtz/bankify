@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
   database: "bankify",
-  password: "YOUR_PASSWORD",
+  password: "",
 });
 
 const PORT = 3000;
@@ -28,6 +28,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
