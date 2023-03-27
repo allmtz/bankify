@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import "../styles/SignUp.css";
-
-export const SignIn = () => {
+export const SignUp = ({ setSigningUp, setIsLoggedIn, setUserID }) => {
   const userName = useRef();
   const fname = useRef();
   const lname = useRef();
@@ -18,7 +17,7 @@ export const SignIn = () => {
     userInfoArray.push(["password", password.current.value]);
     for (let i = 0; i < userInfoArray.length; i++) {
       if (userInfoArray[i][1].trim() === "") {
-        alert("INVALID INPUT ASSHOLE!");
+        alert("Invalid Input Field!");
         break;
       } else {
         obj[userInfoArray[i][0]] = userInfoArray[i][1].trim();
@@ -34,10 +33,17 @@ export const SignIn = () => {
     };
 
     if (Object.keys(obj).length === 5) {
-      fetch("http://localhost:3000/signup", options)
-        .then((response) => response.json)
-        .then((json) => console.log("this is json : ", json));
+      fetch("http://localhost:3000/signup", options).then((response) => {
+        console.log(response.json);
+        if (response.status === 201) {
+          setIsLoggedIn(true);
+          setUserID({ userName: obj["userName"] });
+        }
+      });
     }
+  }
+  function click() {
+    setSigningUp(false);
   }
 
   return (
@@ -51,6 +57,7 @@ export const SignIn = () => {
         <input ref={email} type="email" placeholder="Email" />
         <input ref={password} type="password" placeholder="Password" />
         <button>Submit</button>
+        <h4 onClick={click}>Login Page</h4>
       </form>
     </div>
   );

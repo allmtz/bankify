@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import "../styles/Login.css";
 
-export const Login = () => {
+export const Login = ({ setIsLoggedIn, setSigningUp, setUserID }) => {
   const username = useRef();
   const password = useRef();
   const res = [];
@@ -22,10 +22,17 @@ export const Login = () => {
         },
         body: JSON.stringify(obj),
       };
-      fetch("http://localhost:3000/login", options)
-        .then((response) => response.json)
-        .then((json) => console.log("json response:" + json));
+      fetch("http://localhost:3000/login", options).then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          setIsLoggedIn(true);
+          setUserID({ userName: obj["userName"] });
+        }
+      });
     }
+  }
+  function click() {
+    setSigningUp(true);
   }
   return (
     <div className="login_main_div">
@@ -34,6 +41,7 @@ export const Login = () => {
         <input ref={username} type="text" placeholder="Username" />
         <input ref={password} type="password" placeholder="Password" />
         <button>Submit</button>
+        <h4 onClick={click}>Sign Up</h4>
       </form>
     </div>
   );
