@@ -1,6 +1,15 @@
 to make a get request :
     $ curl http://localhost:3000/<TARGET_PATH>
 
+to start express server:
+    $ nodemon server/index.js
+
+to check if mysql is live:
+    $ mysql status
+    
+to start mysql:
+    $ mysql.server start
+
 
 usernames and un-hashed passwords
     { user_name: 'johnsmithy', password: 'pass' },
