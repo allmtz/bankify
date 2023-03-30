@@ -52,9 +52,10 @@ app.get(`/user/:id/balance`, (req, res) => {
     if (err) throw err;
 
     let balance = data[0] ? data[0].balance.toString() : null;
+    const bal = { balance: balance };
 
     if (balance) {
-      res.send(`${balance}\n`);
+      res.json(bal);
     } else {
       res.sendStatus(404);
     }
@@ -218,7 +219,7 @@ app.post("/login", (req, res) => {
         name: data[0].user_name,
         id: data[0].id,
       };
-      res.send(user);
+      res.status(200).json(user);
     } else {
       //password is incorrect
       res.sendStatus(401);
