@@ -28,8 +28,8 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   next();
 });
 
@@ -120,7 +120,7 @@ app.post(`/user/:id/balance/deposit`, (req, res) => {
   });
 });
 
-app.post(`user/:id/balance/withdraw`, (req, res) => {
+app.post(`/user/:id/balance/withdraw`, (req, res) => {
   const withdrawAmount = Number(req.body.amount);
 
   //sanitize request
