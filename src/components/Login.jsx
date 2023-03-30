@@ -1,18 +1,25 @@
 import { useRef } from "react";
 import "../styles/Login.css";
 
-export const Login = ({ setIsLoggedIn, setSigningUp, setUserID }) => {
-  const username = useRef();
-  const password = useRef();
+export const Login = ({
+  setIsLoggedIn,
+  setSigningUp,
+  setUserName,
+  setUserID,
+}) => {
+  const username = useRef(null);
+  const password = useRef(null);
   const res = [];
   const obj = {};
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     res.push(["userName", username.current.value]);
     res.push(["password", password.current.value]);
     for (let i = 0; i < res.length; i++) {
       obj[res[i][0]] = res[i][1].trim();
     }
+    let response;
+    let responseJson;
     if (Object.keys(obj).length === 2) {
       const options = {
         method: "POST",
@@ -22,13 +29,28 @@ export const Login = ({ setIsLoggedIn, setSigningUp, setUserID }) => {
         },
         body: JSON.stringify(obj),
       };
-      fetch("http://localhost:3000/login", options).then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          setIsLoggedIn(true);
-          setUserID({ userName: obj["userName"] });
-        }
-      });
+      try {
+        response = await fetch("http://localhost:3000/login", options);
+        responseJson = await response.json();
+        setIsLoggedIn(true);
+        setUserName(responseJson.name);
+        setUserID(responseJson.id);
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+      // fetch("http://localhost:3000/login", options)
+      //   .then((response) => response.json())
+      //   .then((json) => {
+      //     console.log(json);
+      //     if (json.name) {
+      //       setIsLoggedIn(true);
+      //       setUserName(json.name);
+      //       setUserID(json.id);
+      //     }
+      //   }).catch(err => {
+      //     console.error(err);
+      //   })
     }
   }
   function click() {

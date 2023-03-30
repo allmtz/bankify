@@ -1,6 +1,11 @@
 import { useRef } from "react";
 import "../styles/SignUp.css";
-export const SignUp = ({ setSigningUp, setIsLoggedIn, setUserID }) => {
+export const SignUp = ({
+  setSigningUp,
+  setIsLoggedIn,
+  setUserID,
+  setUserName,
+}) => {
   const userName = useRef();
   const fname = useRef();
   const lname = useRef();
@@ -8,7 +13,7 @@ export const SignUp = ({ setSigningUp, setIsLoggedIn, setUserID }) => {
   const password = useRef();
   const userInfoArray = [];
   const obj = {};
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     userInfoArray.push(["userName", userName.current.value]);
     userInfoArray.push(["fname", fname.current.value]);
@@ -31,15 +36,18 @@ export const SignUp = ({ setSigningUp, setIsLoggedIn, setUserID }) => {
       },
       body: JSON.stringify(obj),
     };
+    let response;
+    let responseJson;
 
-    if (Object.keys(obj).length === 5) {
-      fetch("http://localhost:3000/signup", options).then((response) => {
-        console.log(response.json);
-        if (response.status === 201) {
-          setIsLoggedIn(true);
-          setUserID({ userName: obj["userName"] });
-        }
-      });
+    try {
+      response = await fetch("http://localhost:3000/login", options);
+      responseJson = await response.json();
+      setIsLoggedIn(true);
+      // setUserName(responseJson.name);
+      // setUserID(responseJson.id);
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
   }
   function click() {
