@@ -6,14 +6,16 @@ import { HomePage } from "./components/HomePage";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [signingUp, setSigningUp] = useState(false);
-  const [userID, setUserID] = useState("");
+  const [userName, setUserName] = useState(null);
+  const [userID, setUserID] = useState(null);
   return (
     <div className="application">
-      {isLoggedIn && <HomePage userID={userID} />}
+      {isLoggedIn && <HomePage userName={userName} userID={userID} />}
       {!signingUp && !isLoggedIn && (
         <Login
           setIsLoggedIn={setIsLoggedIn}
           setSigningUp={setSigningUp}
+          setUserName={setUserName}
           setUserID={setUserID}
         />
       )}
@@ -21,7 +23,7 @@ function App() {
         <SignUp
           setSigningUp={setSigningUp}
           setIsLoggedIn={setIsLoggedIn}
-          setUserID={setUserID}
+          setUserName={setUserName}
         />
       )}
     </div>

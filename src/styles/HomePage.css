@@ -24,3 +24,12 @@
     align-items: center;
     justify-content: space-evenly;
 }
+
+input {
+    border: none;
+    background-color: rgb(229, 226, 226);
+    height: 4em;
+    width: 80%;
+    border-radius: 0.25em;
+    text-align: center;
+}
